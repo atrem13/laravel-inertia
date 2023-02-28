@@ -22,7 +22,10 @@
                         <tr v-for="post in posts" :key="post.id">
                             <td>{{ post.title }}</td>
                             <td>{{ post.content }}</td>
-                            <td class="text-center"></td>
+                            <td class="text-center">
+                                <inertia-link :href="`/posts/${post.id}/edit`" class="btn btn-sm btn-primary me-2">EDIT</inertia-link>
+                                <button @click.prevent="deletePost(`${post.id}`)" class="btn btn-sm btn-danger">DELETE</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -34,15 +37,17 @@
 <script>
     //import layout
     import LayoutApp from '../../Layouts/App.vue'
-    
+
     //import Link dari inertia
     import { Link } from '@inertiajs/inertia-vue3';
+
+    import { Inertia } from '@inertiajs/inertia'
 
     export default {
 
         //layout
         layout: LayoutApp,
-        
+
         //register Link di component
         components: {
             Link
@@ -51,6 +56,22 @@
         //props
         props: {
             posts: Array // <- nama props yang dibuat di controller saat parsing data
+        },
+
+        //define Composition Api
+        setup() {
+
+            //method deletePost
+            function deletePost(id) {
+                
+                Inertia.delete(`/posts/${id}`)
+
+            }
+
+            return {
+                deletePost
+            }
+
         }
     }
 </script>
